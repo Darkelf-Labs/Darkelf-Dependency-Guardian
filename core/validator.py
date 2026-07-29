@@ -84,15 +84,17 @@ class ProjectValidator:
             )
         )
 
+        node_modules_exists = self._exists("node_modules")
+
         report.add(
             ValidationIssue(
                 "node_modules",
-                self._exists("node_modules"),
+                True,  # Optional, never fail validation
                 "Installed"
-                if self._exists("node_modules")
-                else "Run npm install",
-            )
-        )
+                if node_modules_exists
+                else "Not installed (using package lockfile)",
+    )
+)
 
         for exe in ("node", "npm"):
             ok = shutil.which(exe) is not None
