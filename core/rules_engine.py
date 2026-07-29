@@ -32,8 +32,6 @@ class RuleResult:
     reason: str
     replacement: str = ""
 
-from pathlib import Path
-
 class RulesEngine:
     def __init__(self, rules_dir: str | Path | None = None):
         if rules_dir is None:
@@ -51,15 +49,18 @@ class RulesEngine:
     @lru_cache(maxsize=64)
     def load(self, framework: str) -> dict:
         path = self.rules_dir / f"{framework.lower()}.json"
+
         if not path.exists():
             raise FileNotFoundError(path)
+
         data = json.loads(path.read_text(encoding="utf-8"))
+
         if "packages" not in data:
             raise ValueError(
                 f"Invalid schema: {path.name} (missing 'packages')"
             )
 
-            return data
+        return data
 
     def get_rules(self, framework: str) -> list[Rule]:
 
