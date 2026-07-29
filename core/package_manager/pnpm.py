@@ -13,6 +13,8 @@ from .base import PackageManager, CommandResult
 class PnpmManager(PackageManager):
     """pnpm package manager implementation."""
 
+    name =  "pnpm"
+
     executable = "pnpm"
 
     def __init__(self, project_dir: str | Path = "."):
