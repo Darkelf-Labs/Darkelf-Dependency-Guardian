@@ -93,8 +93,8 @@ class ProjectValidator:
                 "Installed"
                 if node_modules_exists
                 else "Not installed (using package lockfile)",
-    )
-)
+            )
+        )
 
         for exe in ("node", "npm"):
             ok = shutil.which(exe) is not None
