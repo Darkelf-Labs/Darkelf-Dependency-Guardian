@@ -8,6 +8,7 @@ from core.compatibility import CompatibilityEngine, print_report
 from core.reporter import Reporter
 from core.updater import GuardianUpdater
 from core.package_manager import PackageManagerDetector
+from core.validator import ProjectValidator
 
 
 VERSION="1.1.0"
@@ -15,7 +16,16 @@ def main():
     startup("Darkelf Dependency Guardian", VERSION)
     p=argparse.ArgumentParser(prog="guardian")
     s=p.add_subparsers(dest="cmd")
-    [s.add_parser(x) for x in ("scan","doctor","audit","verify","compatibility","report","update")]
+    [s.add_parser(x) for x in (
+        "scan",
+        "doctor",
+        "audit",
+        "verify",
+        "validate",
+        "compatibility",
+        "report",
+        "update",
+    )] 
     a=p.parse_args()
     if a.cmd=="scan":
         pr=ProjectScanner(".").scan();print(pr);return 0
