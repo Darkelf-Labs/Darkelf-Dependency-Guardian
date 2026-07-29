@@ -101,6 +101,18 @@ class RulesEngine:
                 )
 
         return RuleResult(True, package, version, "info", "Compatible.")
-
+        
+    def is_allowed(
+        self,
+        framework: str,
+        package: str,
+        version: str,
+    ) -> tuple[bool, str]:
+        """
+        Backwards-compatible wrapper for older Guardian modules.
+        """
+        result = self.check_dependency(framework, package, version)
+        return result.allowed, result.reason
     def list_frameworks(self) -> list[str]:
+    
         return sorted(p.stem for p in self.rules_dir.glob("*.json")) if self.rules_dir.exists() else []
