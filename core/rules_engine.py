@@ -54,22 +54,50 @@ class RulesEngine:
         if not path.exists():
             raise FileNotFoundError(path)
         data = json.loads(path.read_text(encoding="utf-8"))
-        if "rules" not in data or not isinstance(data["rules"], list):
-            raise ValueError(f"Invalid schema: {path.name}")
-        return data
+        if "packages" not in data:
+            raise ValueError(
+                f"Invalid schema: {path.name} (missing 'packages')"
+            )
+
+            return data
 
     def get_rules(self, framework: str) -> list[Rule]:
-        return [
-            Rule(
-                package=i["package"],
-                allowed=i.get("allowed", []),
-                blocked=i.get("blocked", []),
-                replacement=i.get("replacement", ""),
-                severity=i.get("severity", "high"),
-                reason=i.get("reason", ""),
+
+        data = self.load(framework)
+
+        packages = data.get("packages", {})
+        blocked = data.get("blocked", {})
+
+        rules = []
+
+        for package, allowed in packages.items():
+
+            if isinstance(allowed, str):
+                allowed = [allowed]
+
+            blocked_versions = []
+            reason = ""
+
+            for item in blocked.get(package, []):
+
+                blocked_versions.append(
+                    item.get("version", "")
+                )
+
+                if not reason:
+                    reason = item.get("reason", "")
+
+            rules.append(
+                Rule(
+                    package=package,
+                    allowed=allowed,
+                    blocked=blocked_versions,
+                    severity="high",
+                    reason=reason,
+                )
             )
-            for i in self.load(framework)["rules"]
-        ]
+
+        return rules
 
     def find_rule(self, framework: str, package: str) -> Rule | None:
         return next((r for r in self.get_rules(framework) if r.package == package), None)
@@ -79,10 +107,13 @@ class RulesEngine:
         if rule is None:
             return RuleResult(True, package, version, "info", "No compatibility rule.")
 
-        major = self._major(version)
+        installed_major = self._major(version)
 
         for blocked in rule.blocked:
-            if self._major(blocked) == major:
+
+            blocked_major = self._major(blocked)
+
+            if blocked_major == installed_major:
                 return RuleResult(
                     False,
                     package,
@@ -93,8 +124,12 @@ class RulesEngine:
                 )
 
         if rule.allowed:
-            allowed_majors = {self._major(v) for v in rule.allowed}
-            if major not in allowed_majors:
+            allowed_majors = {
+                self._major(v)
+                for v in rule.allowed
+            }
+
+            if installed_major not in allowed_majors:             
                 return RuleResult(
                     False,
                     package,
