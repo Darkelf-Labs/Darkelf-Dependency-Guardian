@@ -32,12 +32,14 @@ class RuleResult:
     reason: str
     replacement: str = ""
 
-
 class RulesEngine:
     """Framework compatibility rule loader."""
 
-    def __init__(self, rules_dir: str | Path = "rules"):
-        self.rules_dir = Path(rules_dir)
+    def __init__(self, rules_dir: str | Path | None = None):
+        if rules_dir is None:
+            self.rules_dir = Path(__file__).resolve().parent.parent / "rules"
+        else:
+            self.rules_dir = Path(rules_dir)
 
     @staticmethod
     def _major(version: str) -> str:
