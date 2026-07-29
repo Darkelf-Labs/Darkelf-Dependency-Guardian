@@ -36,8 +36,8 @@ class CompatibilityReport:
 class CompatibilityEngine:
     """Validate installed dependencies using RulesEngine."""
 
-    def __init__(self, rules_dir=None):
-        self.rules = RulesEngine(rules_dir or "rules")
+def __init__(self, rules_dir=None):
+    self.rules = RulesEngine(rules_dir)
 
     @staticmethod
     def _major(version: str) -> str:
