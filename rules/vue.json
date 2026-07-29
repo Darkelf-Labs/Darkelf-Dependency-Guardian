@@ -1,0 +1,7 @@
+{
+  "framework": "vue",
+  "node": ">=20",
+  "typescript": ">=5 <6.1",
+  "eslint": "^9",
+  "vue": "^3"
+}

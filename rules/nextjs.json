@@ -1,0 +1,26 @@
+{
+  "framework": "nextjs",
+  "node": ">=20",
+  "packages": {
+    "next": "^16",
+    "react": "^19",
+    "react-dom": "^19",
+    "typescript": ">=5 <6.1",
+    "eslint": "^9",
+    "eslint-config-next": "^16"
+  },
+  "blocked": {
+    "eslint": [
+      {
+        "version": ">=10",
+        "reason": "Not yet supported by eslint-config-next."
+      }
+    ],
+    "typescript": [
+      {
+        "version": ">=6.1",
+        "reason": "Outside tested compatibility range."
+      }
+    ]
+  }
+}

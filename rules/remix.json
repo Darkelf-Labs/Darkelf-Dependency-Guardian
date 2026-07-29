@@ -1,0 +1,7 @@
+{
+  "framework": "remix",
+  "node": ">=20",
+  "typescript": ">=5 <6.1",
+  "eslint": "^9",
+  "@remix-run/react": "^2"
+}

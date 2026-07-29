@@ -1,0 +1,7 @@
+{
+  "framework": "angular",
+  "node": ">=20",
+  "typescript": ">=5 <6.1",
+  "eslint": "^9",
+  "@angular/core": "^20"
+}

@@ -1,0 +1,88 @@
+ [build-system]
+ requires = ["setuptools>=80", "wheel"]
+ build-backend = "setuptools.build_meta"
+
+ [project]
+ name = "darkelf-dependency-guardian"
+ version = "0.1.0"
+ description = "Framework-aware dependency compatibility and update analysis for JavaScript projects."
+ readme = "README.md"
+ requires-python = ">=3.11"
+ license = "MIT"
+ authors = [
+     { name = "Darkelf Labs" }
+ ]
+ keywords = [
+     "dependency",
+     "npm",
+     "pnpm",
+     "yarn",
+     "bun",
+     "nextjs",
+     "react",
+     "typescript",
+     "eslint",
+     "security",
+     "compatibility",
+ ]
+ classifiers = [
+     "Development Status :: 3 - Alpha",
+     "Intended Audience :: Developers",
+     "License :: OSI Approved :: MIT License",
+     "Operating System :: OS Independent",
+     "Programming Language :: Python :: 3",
+     "Programming Language :: Python :: 3.11",
+     "Programming Language :: Python :: 3.12",
+     "Topic :: Software Development",
+     "Topic :: Software Development :: Build Tools",
+     "Topic :: Software Development :: Quality Assurance",
+ ]
+
+ dependencies = [
+     "packaging>=24.0",
+ ]
+
+ [project.optional-dependencies]
+ dev = [
+     "ruff>=0.13",
+     "pytest>=8.0",
+ ]
+
+ [project.urls]
+ Homepage = "https://github.com/Darkelf-Labs/Darkelf-Dependency-Guardian"
+ Repository = "https://github.com/Darkelf-Labs/Darkelf-Dependency-Guardian"
+ Issues = "https://github.com/Darkelf-Labs/Darkelf-Dependency-Guardian/issues"
+
+ [project.scripts]
+ guardian = "guardian:main"
+
+ [tool.setuptools]
+ include-package-data = true
+
+ [tool.setuptools.packages.find]
+ include = [
+     "core",
+     "core.*",
+ ]
+
+ [tool.ruff]
+ line-length = 100
+ target-version = "py311"
+
+ [tool.ruff.lint]
+ select = [
+     "E",
+     "F",
+     "I",
+     "UP",
+     "B",
+ ]
+
+ ignore = [
+     "E501",
+ ]
+
+ [tool.pytest.ini_options]
+ testpaths = [
+     "tests",
+ ]

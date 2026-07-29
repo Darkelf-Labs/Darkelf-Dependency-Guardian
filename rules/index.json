@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "frameworks": [
+    "nextjs",
+    "react",
+    "vue",
+    "angular",
+    "svelte",
+    "astro",
+    "remix",
+    "express",
+    "nestjs",
+    "vite",
+    "electron",
+    "node"
+  ]
+}
