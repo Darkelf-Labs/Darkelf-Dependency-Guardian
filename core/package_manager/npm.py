@@ -24,6 +24,8 @@ class CommandResult:
 class NpmManager:
     """Wrapper around npm."""
 
+    name = "npm"
+
     def __init__(self, project_dir: str | Path = "."):
         self.project_dir = Path(project_dir).resolve()
 
