@@ -7,7 +7,9 @@ from core.scanner import ProjectScanner
 from core.compatibility import CompatibilityEngine, print_report
 from core.reporter import Reporter
 from core.updater import GuardianUpdater
-from core.package_manager import NpmManager
+from core.package_manager import PackageManagerDetector
+
+
 VERSION="1.1.0"
 def main():
     startup("Darkelf Dependency Guardian", VERSION)
@@ -20,13 +22,20 @@ def main():
     if a.cmd=="doctor":
         GuardianDoctor().run();return 0
     if a.cmd=="audit":
-        r=NpmManager(".").audit();print(r.stdout);return r.exit_code
+        pm = PackageManagerDetector(".").detect()
+        r = pm.audit()
+        print(r.stdout)
+        return r.exit_code
     if a.cmd=="verify":
-        npm=NpmManager(".")
-        for fn in (npm.lint,npm.build):
-            r=fn()
-            if not r.success:return r.exit_code
-        success("Verification complete");return 0
+        pm = PackageManagerDetector(".").detect()
+
+        for fn in (pm.lint, pm.build):
+            r = fn()
+            if not r.success:
+                return r.exit_code
+
+        success("Verification complete")
+        return 0
     if a.cmd=="compatibility":
         rep=CompatibilityEngine().check(ProjectScanner(".").scan());print_report(rep);return 0
     if a.cmd=="report":
