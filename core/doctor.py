@@ -8,10 +8,11 @@ from __future__ import annotations
 from pathlib import Path
 
 from .compatibility import CompatibilityEngine, print_report
+from .package_manager.detect import PackageManagerDetector
 from .reporter import Reporter
+from .rules_engine import RulesEngine
 from .scanner import ProjectScanner
 from .validator import ProjectValidator, print_validation
-from .package_manager.detect import PackageManagerDetector
 
 
 class GuardianDoctor:
@@ -22,7 +23,7 @@ class GuardianDoctor:
         project_dir: str | Path = ".",
         reports_dir: str | Path = "reports",
     ):
-        self.project_dir = Path(project_dir)
+        self.project_dir = Path(project_dir).resolve()
 
         self.validator = ProjectValidator(self.project_dir)
 
@@ -42,10 +43,6 @@ class GuardianDoctor:
         print("Darkelf Dependency Guardian")
         print("=" * 60)
 
-        #
-        # Validate project
-        #
-
         validation = self.validator.validate()
 
         print_validation(validation)
@@ -55,9 +52,13 @@ class GuardianDoctor:
             print("Project validation failed.")
             return validation
 
-        #
-        # Package manager information
-        #
+        rules = RulesEngine()
+
+        print("Guardian")
+        print("-" * 60)
+        print(f"Rules Directory : {rules.rules_dir}")
+        print(f"Rules Present   : {rules.rules_dir.exists()}")
+        print()
 
         print("Package Manager")
         print("-" * 60)
@@ -70,33 +71,19 @@ class GuardianDoctor:
 
         print()
 
-        #
-        # Project scan
-        #
-
         project = self.scanner.scan()
 
         print("Project")
         print("-" * 60)
-
         print(f"Name            : {project.package_name}")
         print(f"Framework       : {project.framework}")
         print(f"Package Manager : {project.package_manager}")
         print(f"Version         : {project.version}")
-
         print()
-
-        #
-        # Compatibility
-        #
 
         report = self.compatibility.check(project)
 
         print_report(report)
-
-        #
-        # Reports
-        #
 
         outputs = {
             "json": self.reporter.write_json(report),
@@ -106,7 +93,6 @@ class GuardianDoctor:
         }
 
         print()
-
         print("Generated Reports")
         print("-" * 60)
 
@@ -114,29 +100,6 @@ class GuardianDoctor:
             print(f"{fmt.upper():10} {path}")
 
         print()
-
-        #
-        # Package manager diagnostics
-        #
-
-        print("Package Manager Diagnostics")
-        print("-" * 60)
-
-        doctor = self.package_manager.doctor()
-
-        if doctor.success:
-            print(doctor.stdout)
-        else:
-            print(doctor.stderr)
-
-        print()
-
-        audit = self.package_manager.audit()
-
-        if audit.success:
-            print("Audit completed successfully.")
-        else:
-            print("Audit reported issues.")
 
         return report
 
