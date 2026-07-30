@@ -33,7 +33,13 @@ class RuleResult:
     replacement: str = ""
 
 class RulesEngine:
-    def __init__(self, rules_dir: str | Path | None = None):
+    def __init__(
+        self,
+        rules_dir: str | Path | None = None,
+        mode: str = "strict",
+    ):
+        self.mode = mode.lower()
+
         if rules_dir is None:
             self.rules_dir = (
                 Path(__file__).resolve().parent.parent / "rules"
@@ -128,9 +134,20 @@ class RulesEngine:
             allowed_majors = {
                 self._major(v)
                 for v in rule.allowed
-            }
+             }
 
-            if installed_major not in allowed_majors:             
+            if installed_major not in allowed_majors:
+
+                if self.mode == "permissive":
+                    return RuleResult(
+                        True,
+                        package,
+                        version,
+                        "warning",
+                        "Outside tested compatibility range.",
+                        rule.replacement,
+                    )
+
                 return RuleResult(
                     False,
                     package,
