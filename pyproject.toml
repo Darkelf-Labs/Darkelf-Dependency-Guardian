@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Framework-aware dependency compatibility analysis and safe update recommendations."
 readme = "README.md"
 requires-python = ">=3.11"
-license = "MIT"
+license = "LGPL-3.0-or-later"
 
 authors = [
     { name = "Darkelf Labs" }
