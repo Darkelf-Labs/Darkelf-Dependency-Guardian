@@ -10,7 +10,6 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-
 FRAMEWORKS = {
     "next": "Next.js",
     "react": "React",
@@ -56,7 +55,7 @@ class ProjectScanner:
         raise FileNotFoundError("package.json not found.")
 
     def _load_package_json(self) -> dict[str, Any]:
-        with open(self.root / "package.json", "r", encoding="utf-8") as f:
+        with open(self.root / "package.json", encoding="utf-8") as f:
             return json.load(f)
 
     def detect_package_manager(self) -> str:

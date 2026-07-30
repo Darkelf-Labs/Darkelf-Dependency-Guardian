@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import argparse, sys
-from logger import startup, info, success, failure
-from core.doctor import GuardianDoctor
-from core.scanner import ProjectScanner
-from core.compatibility import CompatibilityEngine, print_report
-from core.reporter import Reporter
-from core.updater import GuardianUpdater
-from core.package_manager import PackageManagerDetector
-from core.validator import ProjectValidator
 
+import argparse
+
+from core.compatibility import CompatibilityEngine, print_report
+from core.doctor import GuardianDoctor
+from core.package_manager import PackageManagerDetector
+from core.reporter import Reporter
+from core.scanner import ProjectScanner
+from core.updater import GuardianUpdater
+from logger import startup, success
 
 VERSION="1.1.0"
 def main():

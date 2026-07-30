@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from .base import PackageManager, CommandResult
+from .base import CommandResult, PackageManager
 
 
 class PnpmManager(PackageManager):

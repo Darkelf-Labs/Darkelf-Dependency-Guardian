@@ -9,7 +9,6 @@ import subprocess
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Optional
 
 
 @dataclass(slots=True)
@@ -31,7 +30,7 @@ class NpmManager:
 
     def _run(
         self,
-        args: List[str],
+        args: list[str],
         timeout: int = 600,
     ) -> CommandResult:
         """Execute an npm command."""

@@ -18,13 +18,12 @@ import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Any
 
 from logger import (
-    info,
-    warning,
     error,
+    info,
     success,
+    warning,
 )
 
 # ============================================================
@@ -53,7 +52,7 @@ def file_exists(path: str | Path) -> bool:
 
 def read_json(path: str | Path) -> dict:
 
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         return json.load(f)
 
 

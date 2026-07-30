@@ -10,10 +10,10 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from .compatibility import CompatibilityEngine
+from .package_manager import PackageManagerDetector
 from .rollback import RollbackManager
 from .scanner import ProjectScanner
 from .validator import ProjectValidator
-from .package_manager import PackageManagerDetector
 
 
 @dataclass(slots=True)

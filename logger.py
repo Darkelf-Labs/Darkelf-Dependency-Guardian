@@ -12,10 +12,8 @@ from __future__ import annotations
 import logging
 import sys
 import time
-from pathlib import Path
 
 from config import LOG_FILE, LOGS
-
 
 # ============================================================
 # Colors
