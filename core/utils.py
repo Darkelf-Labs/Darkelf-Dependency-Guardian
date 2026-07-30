@@ -30,6 +30,7 @@ from logger import (
 # Platform
 # ============================================================
 
+
 def operating_system() -> str:
     return platform.system()
 
@@ -45,6 +46,7 @@ def python_version() -> str:
 # ============================================================
 # Files
 # ============================================================
+
 
 def file_exists(path: str | Path) -> bool:
     return Path(path).exists()
@@ -93,6 +95,7 @@ def write_text(path: str | Path, text: str):
 # Checksums
 # ============================================================
 
+
 def sha256(path: str | Path) -> str:
 
     h = hashlib.sha256()
@@ -114,6 +117,7 @@ def sha256(path: str | Path) -> str:
 # ============================================================
 # Command Runner
 # ============================================================
+
 
 def run(
     command: list[str],
@@ -146,9 +150,7 @@ def run(
         print(result.stderr)
 
     if check and result.returncode != 0:
-        raise RuntimeError(
-            result.stderr.strip()
-        )
+        raise RuntimeError(result.stderr.strip())
 
     return result
 
@@ -156,6 +158,7 @@ def run(
 # ============================================================
 # Environment
 # ============================================================
+
 
 def command_exists(name: str) -> bool:
     return shutil.which(name) is not None
@@ -172,6 +175,7 @@ def require(name: str):
 # ============================================================
 # npm
 # ============================================================
+
 
 def npm_version() -> str:
 
@@ -191,6 +195,7 @@ def node_version() -> str:
 # Timing
 # ============================================================
 
+
 class Stopwatch:
 
     def __init__(self):
@@ -199,15 +204,13 @@ class Stopwatch:
 
     def elapsed(self):
 
-        return (
-            time.perf_counter()
-            - self.start
-        )
+        return time.perf_counter() - self.start
 
 
 # ============================================================
 # Formatting
 # ============================================================
+
 
 def human_bytes(size: int) -> str:
 
@@ -230,6 +233,7 @@ def human_bytes(size: int) -> str:
 # ============================================================
 # Git
 # ============================================================
+
 
 def git_branch() -> str:
 
@@ -261,6 +265,7 @@ def git_clean() -> bool:
 # Package
 # ============================================================
 
+
 def package_json() -> dict:
 
     return read_json("package.json")
@@ -285,6 +290,7 @@ def package_version() -> str:
 # ============================================================
 # Misc
 # ============================================================
+
 
 def timestamp() -> str:
 
@@ -315,6 +321,7 @@ def getenv(
 # ============================================================
 # Version
 # ============================================================
+
 
 def print_environment():
 

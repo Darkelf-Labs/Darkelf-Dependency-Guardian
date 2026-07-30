@@ -37,15 +37,11 @@ class GuardianUpdater:
 
         self.validator = ProjectValidator(self.project_dir)
 
-        self.pm = PackageManagerDetector(
-            self.project_dir
-        ).detect()
+        self.pm = PackageManagerDetector(self.project_dir).detect()
 
         self.compatibility = CompatibilityEngine()
 
-        self.rollback = RollbackManager(
-            self.project_dir
-        )
+        self.rollback = RollbackManager(self.project_dir)
 
     # ---------------------------------------------------------
     # Dependency discovery
@@ -76,10 +72,7 @@ class GuardianUpdater:
 
         outdated = self.get_outdated()
 
-        blocked = {
-            issue.package
-            for issue in report.issues
-        }
+        blocked = {issue.package for issue in report.issues}
 
         recommendations = []
 
@@ -163,11 +156,7 @@ class GuardianUpdater:
         # Compatibility
         #
 
-        blocked = [
-            r
-            for r in self.recommend()
-            if r.action == "BLOCK"
-        ]
+        blocked = [r for r in self.recommend() if r.action == "BLOCK"]
 
         if blocked:
 
@@ -175,9 +164,7 @@ class GuardianUpdater:
 
             for item in blocked:
 
-                print(
-                    f" - {item.package}: {item.reason}"
-                )
+                print(f" - {item.package}: {item.reason}")
 
             return 1
 

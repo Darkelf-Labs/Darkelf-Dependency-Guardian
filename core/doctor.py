@@ -33,9 +33,7 @@ class GuardianDoctor:
 
         self.reporter = Reporter(reports_dir)
 
-        self.package_manager = PackageManagerDetector(
-            self.project_dir
-        ).detect()
+        self.package_manager = PackageManagerDetector(self.project_dir).detect()
 
     def run(self):
 

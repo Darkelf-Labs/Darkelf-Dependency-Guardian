@@ -19,6 +19,7 @@ from config import LOG_FILE, LOGS
 # Colors
 # ============================================================
 
+
 class Color:
     RED = "\033[91m"
     GREEN = "\033[92m"
@@ -59,9 +60,7 @@ if not logger.handlers:
     console = logging.StreamHandler(sys.stdout)
     console.setLevel(logging.INFO)
 
-    console.setFormatter(
-        ColoredFormatter("%(levelname)-8s %(message)s")
-    )
+    console.setFormatter(ColoredFormatter("%(levelname)-8s %(message)s"))
 
     logfile = logging.FileHandler(LOG_FILE, encoding="utf-8")
     logfile.setLevel(logging.DEBUG)
@@ -80,6 +79,7 @@ if not logger.handlers:
 # ============================================================
 # Helper Functions
 # ============================================================
+
 
 def info(message: str):
     logger.info(message)
@@ -124,6 +124,7 @@ def separator():
 # Timer
 # ============================================================
 
+
 class Timer:
 
     def __init__(self, label: str):
@@ -148,6 +149,7 @@ class Timer:
 # GitHub Actions
 # ============================================================
 
+
 def github_notice(message: str):
     print(f"::notice::{message}")
 
@@ -164,6 +166,7 @@ def github_error(message: str):
 # Exception Logger
 # ============================================================
 
+
 def exception(exc: Exception):
     logger.exception(exc)
 
@@ -171,6 +174,7 @@ def exception(exc: Exception):
 # ============================================================
 # Session Header
 # ============================================================
+
 
 def startup(app_name: str, version: str):
 

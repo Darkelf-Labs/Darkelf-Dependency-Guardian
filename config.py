@@ -154,6 +154,7 @@ RESET = "\033[0m"
 # Helpers
 # ============================================================
 
+
 def initialize() -> None:
     """
     Create Guardian working directories.
@@ -166,6 +167,7 @@ def initialize() -> None:
     BACKUPS.mkdir(exist_ok=True)
 
     LOGS.mkdir(exist_ok=True)
+
 
 def banner() -> str:
     return f"{APP_NAME} v{VERSION}"

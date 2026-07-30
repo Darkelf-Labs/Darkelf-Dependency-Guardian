@@ -13,7 +13,7 @@ from .base import CommandResult, PackageManager
 class PnpmManager(PackageManager):
     """pnpm package manager implementation."""
 
-    name =  "pnpm"
+    name = "pnpm"
 
     executable = "pnpm"
 

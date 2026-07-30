@@ -90,9 +90,11 @@ class ProjectValidator:
             ValidationIssue(
                 "node_modules",
                 True,  # Optional, never fail validation
-                "Installed"
-                if node_modules_exists
-                else "Not installed (using package lockfile)",
+                (
+                    "Installed"
+                    if node_modules_exists
+                    else "Not installed (using package lockfile)"
+                ),
             )
         )
 
@@ -117,9 +119,7 @@ class ProjectValidator:
                 ValidationIssue(
                     f"script:{script}",
                     ok,
-                    "Present"
-                    if ok
-                    else "Missing required script",
+                    "Present" if ok else "Missing required script",
                 )
             )
 
@@ -131,9 +131,7 @@ class ProjectValidator:
                 ValidationIssue(
                     f"script:{script}",
                     True,
-                    "Present"
-                    if ok
-                    else "Optional",
+                    "Present" if ok else "Optional",
                 )
             )
 
@@ -143,9 +141,7 @@ class ProjectValidator:
             ValidationIssue(
                 "reports",
                 True,
-                "Present"
-                if reports_dir.exists()
-                else "Will be created automatically",
+                "Present" if reports_dir.exists() else "Will be created automatically",
             )
         )
 

@@ -78,15 +78,11 @@ class CompatibilityEngine:
 
     def check(self, project_info) -> CompatibilityReport:
 
-        framework = self._normalize_framework(
-            project_info.framework
-        )
+        framework = self._normalize_framework(project_info.framework)
 
         report = CompatibilityReport(
             framework=project_info.framework,
-            framework_version=self._detect_framework_version(
-                project_info
-            ),
+            framework_version=self._detect_framework_version(project_info),
         )
 
         for package, installed in project_info.all_packages.items():

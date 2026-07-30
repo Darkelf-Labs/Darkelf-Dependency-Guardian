@@ -1,4 +1,3 @@
-
 """
 Darkelf Dependency Guardian
 Reporter
@@ -55,14 +54,16 @@ class Reporter:
             lines.append("No compatibility issues detected.")
         else:
             for issue in report.issues:
-                lines.extend([
-                    f"### {issue.package}",
-                    f"- Severity: {issue.severity}",
-                    f"- Installed: `{issue.installed}`",
-                    f"- Expected: `{issue.expected}`",
-                    f"- Message: {issue.message}",
-                    "",
-                ])
+                lines.extend(
+                    [
+                        f"### {issue.package}",
+                        f"- Severity: {issue.severity}",
+                        f"- Installed: `{issue.installed}`",
+                        f"- Expected: `{issue.expected}`",
+                        f"- Message: {issue.message}",
+                        "",
+                    ]
+                )
 
         path.write_text("\n".join(lines), encoding="utf-8")
         return path
@@ -127,24 +128,28 @@ th{{background:#f3f3f3}}
     def write_sarif(self, report: Any, filename: str = "report.sarif") -> Path:
         results = []
         for issue in report.issues:
-            results.append({
-                "ruleId": issue.package,
-                "level": issue.severity.lower(),
-                "message": {"text": issue.message},
-            })
+            results.append(
+                {
+                    "ruleId": issue.package,
+                    "level": issue.severity.lower(),
+                    "message": {"text": issue.message},
+                }
+            )
 
         sarif = {
             "version": "2.1.0",
             "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
-            "runs": [{
-                "tool": {
-                    "driver": {
-                        "name": "Darkelf Dependency Guardian",
-                        "version": "1.0.0",
-                    }
-                },
-                "results": results,
-            }],
+            "runs": [
+                {
+                    "tool": {
+                        "driver": {
+                            "name": "Darkelf Dependency Guardian",
+                            "version": "1.0.0",
+                        }
+                    },
+                    "results": results,
+                }
+            ],
         }
 
         path = self.output_dir / filename
