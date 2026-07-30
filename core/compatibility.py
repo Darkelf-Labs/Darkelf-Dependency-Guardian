@@ -28,35 +28,40 @@ class CompatibilityReport:
 
     def add(self, issue: CompatibilityIssue) -> None:
         self.issues.append(issue)
-        if issue.severity.lower() in {"high", "critical"}:
+
+        if issue.severity.lower() in {
+            "high",
+            "critical",
+        }:
             self.passed = False
 
 
 class CompatibilityEngine:
-    """Validate installed dependencies using RulesEngine."""
+    """Validate project dependencies against Guardian rules."""
 
-    def __init__(self, rules_dir=None):
-        self.rules = RulesEngine(rules_dir)
+    def __init__(
+        self,
+        rules_dir=None,
+        mode: str = "strict",
+    ):
+        self.rules = RulesEngine(
+            rules_dir=rules_dir,
+            mode=mode,
+        )
 
     @staticmethod
-    def _major(version: str) -> str:
-        digits = "".join(
-            ch if ch.isdigit() or ch == "." else " "
-            for ch in version
-        )
-        token = digits.strip().split()
-        return token[0].split(".")[0] if token else "0"
+    def _normalize_framework(name: str) -> str:
+        framework = name.lower().replace(".js", "")
 
-    def check(self, project_info) -> CompatibilityReport:
+        aliases = {
+            "next": "nextjs",
+        }
 
-        framework = project_info.framework.lower().replace(".js", "")
+        return aliases.get(framework, framework)
 
-        if framework == "next":
-            framework = "nextjs"
-
-        fw_version = "unknown"
-
-        for pkg in (
+    @staticmethod
+    def _detect_framework_version(project_info) -> str:
+        for package in (
             "next",
             "react",
             "vue",
@@ -66,50 +71,60 @@ class CompatibilityEngine:
             "astro",
             "nuxt",
         ):
-            if pkg in project_info.all_packages:
-                fw_version = project_info.all_packages[pkg]
-                break
+            if package in project_info.all_packages:
+                return project_info.all_packages[package]
+
+        return "unknown"
+
+    def check(self, project_info) -> CompatibilityReport:
+
+        framework = self._normalize_framework(
+            project_info.framework
+        )
 
         report = CompatibilityReport(
-            project_info.framework,
-            fw_version,
+            framework=project_info.framework,
+            framework_version=self._detect_framework_version(
+                project_info
+            ),
         )
 
         for package, installed in project_info.all_packages.items():
 
-            allowed, reason = self.rules.is_allowed(
+            result = self.rules.check_dependency(
                 framework,
                 package,
                 installed,
             )
 
-            if not allowed:
+            if result.allowed:
+                continue
 
-                rule = self.rules.find_rule(
-                    framework,
-                    package,
-                )
+            rule = self.rules.find_rule(
+                framework,
+                package,
+            )
 
-                expected = (
-                    ", ".join(rule.allowed)
-                    if rule and rule.allowed
-                    else "Supported version"
-                )
+            expected = (
+                ", ".join(rule.allowed)
+                if rule and rule.allowed
+                else "Supported version"
+            )
 
-                report.add(
-                    CompatibilityIssue(
-                        package=package,
-                        installed=installed,
-                        expected=expected,
-                        severity="high",
-                        message=reason,
-                    )
+            report.add(
+                CompatibilityIssue(
+                    package=package,
+                    installed=installed,
+                    expected=expected,
+                    severity=result.severity,
+                    message=result.reason,
                 )
+            )
 
         return report
 
 
-def print_report(report: CompatibilityReport):
+def print_report(report: CompatibilityReport) -> None:
 
     print("=" * 60)
     print("Darkelf Dependency Guardian Compatibility Report")
