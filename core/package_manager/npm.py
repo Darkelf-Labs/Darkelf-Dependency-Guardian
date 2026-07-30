@@ -5,7 +5,8 @@ npm Package Manager Backend
 
 from __future__ import annotations
 
-import subprocess
+import shutil
+import subprocess  # nosec B404
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -35,17 +36,38 @@ class NpmManager:
     ) -> CommandResult:
         """Execute an npm command."""
 
+        allowed = {
+            "install",
+            "ci",
+            "update",
+            "audit",
+            "outdated",
+            "run",
+            "test",
+            "doctor",
+            "--version",
+            "list",
+        }
+
+        if not args or args[0] not in allowed:
+            raise ValueError(f"Unsupported npm command: {args!r}")
+
+        npm = shutil.which("npm")
+        if npm is None:
+            raise FileNotFoundError("npm executable not found.")
+
         start = time.perf_counter()
 
         try:
-            proc = subprocess.run(
-                ["npm", *args],
+            proc = subprocess.run(  # nosec B603
+                [npm, *args],
                 cwd=self.project_dir,
                 capture_output=True,
                 text=True,
                 timeout=timeout,
                 check=False,
             )
+
 
             duration = time.perf_counter() - start
 

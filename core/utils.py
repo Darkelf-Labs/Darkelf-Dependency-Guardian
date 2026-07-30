@@ -14,7 +14,7 @@ import json
 import os
 import platform
 import shutil
-import subprocess
+import subprocess  # nosec B404
 import sys
 import time
 from pathlib import Path
@@ -125,15 +125,28 @@ def run(
     check: bool = False,
 ):
 
+    if not command:
+        raise ValueError("Command cannot be empty.")
+
+    executable = shutil.which(command[0])
+
+    if executable is None:
+        raise FileNotFoundError(
+            f"Executable not found: {command[0]}"
+        )
+
+    command = [executable, *command[1:]]
+
     info(f"$ {' '.join(command)}")
 
     start = time.perf_counter()
 
-    result = subprocess.run(
+    result = subprocess.run(  # nosec B603
         command,
         cwd=cwd,
         capture_output=True,
         text=True,
+        check=False,
     )
 
     elapsed = time.perf_counter() - start

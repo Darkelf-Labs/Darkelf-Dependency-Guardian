@@ -10,7 +10,7 @@ Licensed under the MIT License.
 from __future__ import annotations
 
 import shutil
-import subprocess
+import subprocess  # nosec B404
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -58,14 +58,24 @@ class PackageManager(ABC):
 
     def run(self, command: list[str]) -> CommandResult:
         """
-        Execute a command and return a standardized result.
+        Execute a validated command and return a standardized result.
         """
+
+        if not command:
+            raise ValueError("Empty command.")
+
+        executable = shutil.which(command[0])
+
+        if executable is None:
+            raise FileNotFoundError(
+                f"Executable not found: {command[0]}"
+            )
 
         start = time.perf_counter()
 
         try:
-            result = subprocess.run(
-                command,
+            result = subprocess.run(  # nosec B603
+                [executable, *command[1:]],
                 cwd=self.project_dir,
                 capture_output=True,
                 text=True,
