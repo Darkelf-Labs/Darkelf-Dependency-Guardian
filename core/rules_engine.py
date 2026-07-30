@@ -65,7 +65,11 @@ class RulesEngine:
     def _major(version: str) -> str:
         m = re.search(r"\d+", version or "")
         return m.group(0) if m else "0"
-
+        
+    def load(self, framework: str) -> dict:
+        path = self.rules_dir / f"{framework.lower()}.json"
+        return _load_rules_file(str(path))
+        
     def get_rules(self, framework: str) -> list[Rule]:
 
         data = self.load(framework)
