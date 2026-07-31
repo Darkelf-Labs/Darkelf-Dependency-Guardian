@@ -90,11 +90,7 @@ class ProjectValidator:
             ValidationIssue(
                 "node_modules",
                 True,  # Optional, never fail validation
-                (
-                    "Installed"
-                    if node_modules_exists
-                    else "Not installed (using package lockfile)"
-                ),
+                ("Installed" if node_modules_exists else "Not installed (using package lockfile)"),
             )
         )
 
@@ -112,7 +108,6 @@ class ProjectValidator:
         scripts = data.get("scripts", {})
 
         for script in self.REQUIRED_SCRIPTS:
-
             ok = script in scripts
 
             report.add(
@@ -124,7 +119,6 @@ class ProjectValidator:
             )
 
         for script in self.OPTIONAL_SCRIPTS:
-
             ok = script in scripts
 
             report.add(
@@ -155,7 +149,6 @@ def print_validation(report: ValidationReport) -> None:
     print("=" * 60)
 
     for issue in report.issues:
-
         status = "PASS" if issue.passed else "FAIL"
 
         print(f"[{status:4}] {issue.name:<22} {issue.message}")

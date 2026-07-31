@@ -56,7 +56,6 @@ logger = logging.getLogger("guardian")
 logger.setLevel(logging.DEBUG)
 
 if not logger.handlers:
-
     console = logging.StreamHandler(sys.stdout)
     console.setLevel(logging.INFO)
 
@@ -126,7 +125,6 @@ def separator():
 
 
 class Timer:
-
     def __init__(self, label: str):
         self.label = label
         self.start = 0.0

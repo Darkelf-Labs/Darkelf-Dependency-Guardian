@@ -77,13 +77,11 @@ class GuardianUpdater:
         recommendations = []
 
         for package, info in outdated.items():
-
             current = str(info.get("current", ""))
 
             latest = str(info.get("latest", ""))
 
             if package in blocked:
-
                 recommendations.append(
                     UpdateRecommendation(
                         package,
@@ -95,7 +93,6 @@ class GuardianUpdater:
                 )
 
             else:
-
                 recommendations.append(
                     UpdateRecommendation(
                         package,
@@ -126,7 +123,6 @@ class GuardianUpdater:
             return
 
         for item in recommendations:
-
             print(item.package)
             print(f" Installed : {item.installed}")
             print(f" Latest    : {item.latest}")
@@ -147,7 +143,6 @@ class GuardianUpdater:
         validation = self.validator.validate()
 
         if not validation.passed:
-
             print("Project validation failed.")
 
             return 1
@@ -159,11 +154,9 @@ class GuardianUpdater:
         blocked = [r for r in self.recommend() if r.action == "BLOCK"]
 
         if blocked:
-
             print("Unsafe update cancelled.")
 
             for item in blocked:
-
                 print(f" - {item.package}: {item.reason}")
 
             return 1
@@ -175,7 +168,6 @@ class GuardianUpdater:
         backup = self.rollback.create_backup()
 
         if not backup.success:
-
             print(backup.message)
 
             return 1
@@ -189,7 +181,6 @@ class GuardianUpdater:
         update = self.pm.update()
 
         if not update.success:
-
             print(update.stderr)
 
             self.rollback.restore_latest()
@@ -203,7 +194,6 @@ class GuardianUpdater:
         lint = self.pm.lint()
 
         if not lint.success:
-
             print("Lint failed.")
 
             self.rollback.restore_latest()
@@ -217,7 +207,6 @@ class GuardianUpdater:
         build = self.pm.build()
 
         if not build.success:
-
             print("Build failed.")
 
             self.rollback.restore_latest()
@@ -231,7 +220,6 @@ class GuardianUpdater:
         test = self.pm.test()
 
         if not test.success:
-
             print("Tests failed.")
 
             self.rollback.restore_latest()

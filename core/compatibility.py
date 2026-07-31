@@ -86,7 +86,6 @@ class CompatibilityEngine:
         )
 
         for package, installed in project_info.all_packages.items():
-
             result = self.rules.check_dependency(
                 framework,
                 package,
@@ -101,11 +100,7 @@ class CompatibilityEngine:
                 package,
             )
 
-            expected = (
-                ", ".join(rule.allowed)
-                if rule and rule.allowed
-                else "Supported version"
-            )
+            expected = ", ".join(rule.allowed) if rule and rule.allowed else "Supported version"
 
             report.add(
                 CompatibilityIssue(

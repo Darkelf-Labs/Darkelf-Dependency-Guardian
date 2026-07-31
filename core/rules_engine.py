@@ -30,7 +30,8 @@ class RuleResult:
     severity: str
     reason: str
     replacement: str = ""
-    
+
+
 @lru_cache(maxsize=64)
 def _load_rules_file(path: str) -> dict:
     file = Path(path)
@@ -41,9 +42,7 @@ def _load_rules_file(path: str) -> dict:
     data = json.loads(file.read_text(encoding="utf-8"))
 
     if "packages" not in data:
-        raise ValueError(
-            f"Invalid schema: {file.name} (missing 'packages')"
-        )
+        raise ValueError(f"Invalid schema: {file.name} (missing 'packages')")
 
     return data
 
@@ -65,11 +64,11 @@ class RulesEngine:
     def _major(version: str) -> str:
         m = re.search(r"\d+", version or "")
         return m.group(0) if m else "0"
-        
+
     def load(self, framework: str) -> dict:
         path = self.rules_dir / f"{framework.lower()}.json"
         return _load_rules_file(str(path))
-        
+
     def get_rules(self, framework: str) -> list[Rule]:
 
         data = self.load(framework)
@@ -80,7 +79,6 @@ class RulesEngine:
         rules = []
 
         for package, allowed in packages.items():
-
             if isinstance(allowed, str):
                 allowed = [allowed]
 
@@ -88,7 +86,6 @@ class RulesEngine:
             reason = ""
 
             for item in blocked.get(package, []):
-
                 blocked_versions.append(item.get("version", ""))
 
                 if not reason:
@@ -107,13 +104,9 @@ class RulesEngine:
         return rules
 
     def find_rule(self, framework: str, package: str) -> Rule | None:
-        return next(
-            (r for r in self.get_rules(framework) if r.package == package), None
-        )
+        return next((r for r in self.get_rules(framework) if r.package == package), None)
 
-    def check_dependency(
-        self, framework: str, package: str, version: str
-    ) -> RuleResult:
+    def check_dependency(self, framework: str, package: str, version: str) -> RuleResult:
         rule = self.find_rule(framework, package)
         if rule is None:
             return RuleResult(True, package, version, "info", "No compatibility rule.")
@@ -121,7 +114,6 @@ class RulesEngine:
         installed_major = self._major(version)
 
         for blocked in rule.blocked:
-
             blocked_major = self._major(blocked)
 
             if blocked_major == installed_major:
@@ -138,7 +130,6 @@ class RulesEngine:
             allowed_majors = {self._major(v) for v in rule.allowed}
 
             if installed_major not in allowed_majors:
-
                 if self.mode == "permissive":
                     return RuleResult(
                         True,
@@ -175,7 +166,5 @@ class RulesEngine:
     def list_frameworks(self) -> list[str]:
 
         return (
-            sorted(p.stem for p in self.rules_dir.glob("*.json"))
-            if self.rules_dir.exists()
-            else []
+            sorted(p.stem for p in self.rules_dir.glob("*.json")) if self.rules_dir.exists() else []
         )

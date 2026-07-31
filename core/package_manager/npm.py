@@ -68,7 +68,6 @@ class NpmManager:
                 check=False,
             )
 
-
             duration = time.perf_counter() - start
 
             return CommandResult(

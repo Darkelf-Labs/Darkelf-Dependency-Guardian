@@ -67,9 +67,7 @@ class PackageManager(ABC):
         executable = shutil.which(command[0])
 
         if executable is None:
-            raise FileNotFoundError(
-                f"Executable not found: {command[0]}"
-            )
+            raise FileNotFoundError(f"Executable not found: {command[0]}")
 
         start = time.perf_counter()
 

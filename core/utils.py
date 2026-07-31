@@ -101,9 +101,7 @@ def sha256(path: str | Path) -> str:
     h = hashlib.sha256()
 
     with open(path, "rb") as f:
-
         while True:
-
             chunk = f.read(65536)
 
             if not chunk:
@@ -131,9 +129,7 @@ def run(
     executable = shutil.which(command[0])
 
     if executable is None:
-        raise FileNotFoundError(
-            f"Executable not found: {command[0]}"
-        )
+        raise FileNotFoundError(f"Executable not found: {command[0]}")
 
     command = [executable, *command[1:]]
 
@@ -210,7 +206,6 @@ def node_version() -> str:
 
 
 class Stopwatch:
-
     def __init__(self):
 
         self.start = time.perf_counter()
@@ -234,7 +229,6 @@ def human_bytes(size: int) -> str:
         "GB",
         "TB",
     ):
-
         if size < 1024:
             return f"{size:.2f} {unit}"
 

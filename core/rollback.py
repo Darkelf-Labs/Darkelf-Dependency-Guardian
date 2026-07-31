@@ -58,7 +58,6 @@ class RollbackManager:
         copied = 0
 
         for filename in self.FILES_TO_BACKUP:
-
             src = self.project_dir / filename
 
             if src.exists():
@@ -97,7 +96,6 @@ class RollbackManager:
         restored = 0
 
         for file in backup_dir.iterdir():
-
             shutil.copy2(
                 file,
                 self.project_dir / file.name,
