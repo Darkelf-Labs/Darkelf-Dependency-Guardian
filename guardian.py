@@ -9,6 +9,7 @@ from core.package_manager import PackageManagerDetector
 from core.reporter import Reporter
 from core.scanner import ProjectScanner
 from core.updater import GuardianUpdater
+from core.validator import ProjectValidator, print_validation
 from logger import startup, success
 
 VERSION = "1.1.0"
@@ -32,13 +33,17 @@ def main():
         )
     ]
     a = p.parse_args()
+    if a.cmd == "validate":
+        report = ProjectValidator(".").validate()
+        print_validation(report)
+        return 0 if report.passed else 1
     if a.cmd == "scan":
         pr = ProjectScanner(".").scan()
         print(pr)
         return 0
     if a.cmd == "doctor":
-        GuardianDoctor().run()
-        return 0
+        result = GuardianDoctor().run()
+        return GuardianDoctor.exit_code(result)
     if a.cmd == "audit":
         pm = PackageManagerDetector(".").detect()
         r = pm.audit()
@@ -57,7 +62,7 @@ def main():
     if a.cmd == "compatibility":
         rep = CompatibilityEngine().check(ProjectScanner(".").scan())
         print_report(rep)
-        return 0
+        return 0 if rep.passed else 1
     if a.cmd == "report":
         rep = CompatibilityEngine().check(ProjectScanner(".").scan())
         rp = Reporter()
@@ -65,7 +70,7 @@ def main():
         rp.write_markdown(rep)
         rp.write_html(rep)
         rp.write_sarif(rep)
-        return 0
+        return 0 if rep.passed else 1
     if a.cmd == "update":
         GuardianUpdater(".").print_report()
         return 0
