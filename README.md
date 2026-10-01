@@ -138,7 +138,7 @@ Example:
 
 ## License
 
-MIT License
+LGPL 3.0 License
 
 ---
 
