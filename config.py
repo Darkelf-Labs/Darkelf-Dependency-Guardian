@@ -4,7 +4,7 @@ Darkelf Dependency Guardian
 Configuration
 
 Copyright (c) 2026 Darkelf Labs
-Licensed under the MIT License.
+Licensed under the LGPL 3.0 License.
 """
 
 from __future__ import annotations
@@ -16,7 +16,7 @@ from pathlib import Path
 # ============================================================
 
 APP_NAME = "Darkelf Dependency Guardian"
-VERSION = "1.0.0"
+VERSION = "0.1.0"
 AUTHOR = "Darkelf Labs"
 
 # ============================================================
